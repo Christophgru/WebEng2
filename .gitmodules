@@ -1,0 +1,3 @@
+[submodule "DHBW"]
+	path = DHBW
+	url = https://github.com/FriedhelmKoch/DHBW.git
