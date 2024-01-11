@@ -1,0 +1,18 @@
+{
+  "cwd": "C:\\Users\\chris\\WebstormProjects\\WebEng2\\fw7empty",
+  "type": [
+    "web"
+  ],
+  "name": "WebMap",
+  "framework": "react",
+  "template": "blank",
+  "cssPreProcessor": false,
+  "bundler": "vite",
+  "theming": {
+    "customColor": false,
+    "color": "#007aff",
+    "darkMode": false,
+    "iconFonts": true
+  },
+  "customBuild": false
+}
