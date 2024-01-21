@@ -9,6 +9,11 @@ import {
   Block,
 } from 'framework7-react';
 
+import MapComponent from '../components/MapComponent';
+  
+const initialLocation = [37.7749, -122.4194]; // Example location (San Francisco)
+const zoom = 12;
+
 const HomePage = () => (
   <Page name="home">
     {/* Top Navbar */}
@@ -16,16 +21,13 @@ const HomePage = () => (
       <NavTitle>WebMap</NavTitle>
       <NavTitleLarge>WebMap</NavTitleLarge>
     </Navbar>
+        <MapComponent initialLocation={initialLocation} zoom={zoom} />
     {/* Toolbar */}
     <Toolbar bottom>
       <Link>Left Link</Link>
       <Link>Right Link</Link>
     </Toolbar>
     {/* Page content */}
-    <Block>
-      <p>Here is your blank Framework7 app. Let's see what we have here.</p>
-    </Block>
-
   </Page>
 );
 export default HomePage;
