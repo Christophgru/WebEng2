@@ -1,6 +1,7 @@
 // MapComponent.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
 
 const MapComponent = ({ zoom }) => {
   const [userPosition, setUserPosition] = useState([0, 0]);
@@ -33,9 +34,6 @@ const MapComponent = ({ zoom }) => {
     );
   }, [zoom]);
 
-  const handleUpdatePosition = (newPosition) => {
-    setUserPosition(newPosition);
-  };
 
   const customMarkerIcon = new L.Icon({
     iconUrl: 'icons/marker-icon.png',
