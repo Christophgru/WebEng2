@@ -3,13 +3,11 @@ import React, { useState, useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 
 import {
-  f7,
   f7ready,
   App,
   View,
 } from 'framework7-react';
 
-import MapComponent from './MapComponent';
 
 import routes from '../js/routes';
 import store from '../js/store';
