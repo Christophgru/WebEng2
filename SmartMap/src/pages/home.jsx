@@ -37,6 +37,34 @@ const HomePage = () => {
         setSuggestedCities(matchedCities);
     };
 
+    const getWikipediaPageInfo = async(latitude, longitude) => {
+        const apiUrl = 'http://localhost:3001/wikipedia'; // Use your server URL
+        const params = new URLSearchParams({
+            lat: latitude,
+            lon: longitude,
+        });
+      
+        try {
+            const response = await fetch(`${apiUrl}?${params.toString()}`);
+            const data = await response.json();
+
+            // Process the Wikipedia API response
+            console.log('Wikipedia Data:', data);
+
+            if (data.query && data.query.pages) {
+                const firstPageId = Object.keys(data.query.pages)[0];
+                const pageInfo = data.query.pages[firstPageId];
+
+                console.log('Title:', pageInfo.title);
+                console.log('Extract:', pageInfo.extract);
+            } else {
+                console.log('No Wikipedia page found for the given coordinates.');
+            }
+        } catch (error) {
+            console.error('Error fetching Wikipedia data:', error);
+        }
+    };
+
     const handleSearchConfirm = () => {
         // Hier könntest du Aktionen durchführen, wenn der Bestätigungsbutton gedrückt wird.
         console.log('Suche bestätigt:', searchQuery);
@@ -55,6 +83,7 @@ const HomePage = () => {
 
                 console.log("Latitude/Breitengrad: " + json[0].lat );
                 console.log("Longitude/Längengrad: " + json[0].lon );
+                getWikipediaPageInfo(json[0].lat, json[0].lon)
 
                 //call MapComponent.jsx now and set destinationMarker to [Latitude and Longitude]
                 setDestinationMarker([parseFloat(json[0].lat), parseFloat(json[0].lon)]);

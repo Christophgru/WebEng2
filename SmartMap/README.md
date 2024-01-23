@@ -31,6 +31,8 @@ First of all we need to install dependencies, run in terminal
 ```
 npm install
 ```
+## Node Server
+node server.js to start the Wikipedia Server
 
 ## NPM Scripts
 
