@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import 'leaflet/dist/leaflet.css';
+import '../css/leaflet.css';
 
 import {
   f7ready,
