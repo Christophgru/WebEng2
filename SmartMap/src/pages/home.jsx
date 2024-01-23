@@ -1,3 +1,4 @@
+//home.jsx
 import React, {useState} from 'react';
 import {
     Page,
@@ -23,6 +24,7 @@ const HomePage = () => {
 
     const [searchQuery, setSearchQuery] = useState('');
     const [suggestedCities, setSuggestedCities] = useState([]);
+    const [destinationMarker, setDestinationMarker] = useState([0, 0]);
     const handleSearchChange = (event) => {
         const query = event.target.value;
         setSearchQuery(query);
@@ -38,8 +40,26 @@ const HomePage = () => {
     const handleSearchConfirm = () => {
         // Hier könntest du Aktionen durchführen, wenn der Bestätigungsbutton gedrückt wird.
         console.log('Suche bestätigt:', searchQuery);
+        //Vorschläge zurücksetzen, um platz für Karte zu machen
         setSuggestedCities([]);
         cityList.push(searchQuery);
+
+        fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + searchQuery)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(json) {
+                //console.log("OBJECT: " + JSON.stringify(json));
+                //console.log('LAT: ' + json[0].lat);
+                console.log("Die Koordinaten der Adresse: " +searchQuery+ " sind:");
+
+                console.log("Latitude/Breitengrad: " + json[0].lat );
+                console.log("Longitude/Längengrad: " + json[0].lon );
+
+                //call MapComponent.jsx now and set destinationMarker to [Latitude and Longitude]
+                setDestinationMarker([parseFloat(json[0].lat), parseFloat(json[0].lon)]);
+                //todo: fly to position of destination and draw route
+            })
     };
 
     const handleCitySelect = (chosenCity) => {
@@ -98,7 +118,7 @@ const HomePage = () => {
             )}
 
             {/* Map component */}
-            <MapComponent initialLocation={initialLocation} zoom={zoom} />
+            <MapComponent initialLocation={initialLocation} zoom={zoom} destinationMarker={destinationMarker} />
 
             {/* Toolbar */}
             <Toolbar bottom>

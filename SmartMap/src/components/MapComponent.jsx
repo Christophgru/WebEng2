@@ -3,11 +3,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 
-const MapComponent = ({ zoom }) => {
+const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
   const [userPosition, setUserPosition] = useState([0, 0]);
   const mapRef = useRef(null);
+  const [firstPos, setFirstPos] = useState(0);
 
   useEffect(() => {
+
     const handleUpdatePosition = (newPosition) => {
       setUserPosition(newPosition);
     };
@@ -15,12 +17,17 @@ const MapComponent = ({ zoom }) => {
     const handleGeolocationSuccess = (position) => {
       const { latitude, longitude } = position.coords;
       const newPosition = [latitude, longitude];
-      console.log(position.coords);
+
       handleUpdatePosition(newPosition);
 
       // Center the map on the user's current position
-      mapRef.current && mapRef.current.setView(newPosition, zoom);
+      if(firstPos===0){
+        console.log(position.coords);
+        mapRef.current && mapRef.current.setView(newPosition, zoom);
+        setFirstPos(1);
+      }
     };
+
 
     const handleGeolocationError = (error) => {
       console.log(error);
@@ -32,7 +39,7 @@ const MapComponent = ({ zoom }) => {
         handleGeolocationSuccess,
         handleGeolocationError
     );
-  }, [zoom]);
+  }, [userPosition, zoom]);
 
 
   const customMarkerIcon = new L.Icon({
@@ -42,9 +49,11 @@ const MapComponent = ({ zoom }) => {
     popupAnchor: [0, -32],
   });
 
+
   return (
     <div >
-      <MapContainer ref={mapRef} center={userPosition} zoom={zoom} style={{ height: '100vh', width: '100%' }}>
+      <MapContainer ref={mapRef} center={userPosition} zoom={zoom} style={{ height: '100vh', width: '100%' }}
+      >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -52,6 +61,11 @@ const MapComponent = ({ zoom }) => {
         <Marker position={userPosition} icon={customMarkerIcon}>
           <Popup>Your Marker Popup</Popup>
         </Marker>
+        {destinationMarker && (
+            <Marker position={destinationMarker} icon={customMarkerIcon}>
+              <Popup>Your Destination Marker Popup</Popup>
+            </Marker>
+        )}
       </MapContainer>
     </div>
   );
