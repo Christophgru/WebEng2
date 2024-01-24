@@ -25,6 +25,7 @@
     "framework7-icons": "^5.0.5",
     "framework7-react": "^8.3.0",
     "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
     "material-icons": "^1.13.12",
     "node-fetch": "^3.3.2",
     "prop-types": "^15.8.1",
