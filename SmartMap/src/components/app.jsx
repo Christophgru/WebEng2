@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import '../css/leaflet.css';
 
@@ -10,7 +10,6 @@ import {
 
 
 import routes from '../js/routes';
-import store from '../js/store';
 
 const MyApp = () => {
 
@@ -19,7 +18,6 @@ const MyApp = () => {
   const f7params = {
     name: 'WebMap',
     theme: 'auto',
-    store: store,
     routes: routes,
   };
 
@@ -27,8 +25,7 @@ const MyApp = () => {
     // Call F7 APIs here
   });
   
-  const initialLocation = [37.7749, -122.4194]; // Example location (San Francisco)
-  const zoom = 12;
+
 
   return (
     <App {...f7params}>
