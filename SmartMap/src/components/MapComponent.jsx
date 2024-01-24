@@ -5,12 +5,14 @@ import L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
-const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
+const MapComponent = ({ zoom, destinationMarker }) => {
   const [userPosition, setUserPosition] = useState([0, 0]);
+  const [currentDestination, setCurrentDestination] = useState(null);
   const mapRef = useRef(null);
   const [firstPos, setFirstPos] = useState(0);
 
   useEffect(() => {
+
     const handleUpdatePosition = (newPosition) => {
       setUserPosition(newPosition);
     };
@@ -21,22 +23,27 @@ const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
 
       handleUpdatePosition(newPosition);
 
-      if (firstPos < 5) {
+      // Center the map on the user's current position. Center Map until 5th position arrives, then just update marker.
+      if(firstPos<5){
+        console.log(position.coords);
         mapRef.current && mapRef.current.setView(newPosition, zoom);
-        setFirstPos(firstPos + 1);
+        setFirstPos(firstPos+1);
       }
     };
+
 
     const handleGeolocationError = (error) => {
       console.log(error);
       // TODO: Implement error handling (e.g., show a message to the user)
     };
 
+    // Use Geolocation API to get the user's current position
     navigator.geolocation.getCurrentPosition(
         handleGeolocationSuccess,
         handleGeolocationError
     );
   }, [userPosition, zoom, firstPos]);
+
 
   const customMarkerIcon = new L.Icon({
     iconUrl: 'icons/marker-icon.png',
@@ -46,11 +53,19 @@ const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
   });
 
   useEffect(() => {
-    if (mapRef.current) {
+    if (mapRef.current && destinationMarker && destinationMarker.toString() !== currentDestination) {
       const current = new L.LatLng(userPosition[0], userPosition[1]);
       const target = new L.LatLng(destinationMarker[0], destinationMarker[1]);
+      // Clear existing layers on the map
+      // Clear existing layers on the map
+      mapRef.current.eachLayer((layer) => {
+        if (!(layer instanceof L.TileLayer)) {
+          mapRef.current.removeLayer(layer);
+        }
+      });
 
-      L.Routing.control({
+      // Add new routing control
+      const routingControl= L.Routing.control({
         waypoints: [current, target],
         show: false,
         fitSelectedRoutes: true,
@@ -74,33 +89,52 @@ const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
             const minutes = Math.round((summary.totalTime % 3600) / 60);
 
             console.log(`Total distance: ${distance} km and total time ca: ${minutes} minutes`);
-          })
+          }).addTo(mapRef.current);
+
+      routingControl.addTo(mapRef.current);
+
+      // Add new markers with popups
+      new L.Marker(current, { icon: customMarkerIcon })
+          .bindPopup('Your Marker Popup')
           .addTo(mapRef.current);
+
+      new L.Marker(target, { icon: customMarkerIcon })
+          .bindPopup('Your Destination Marker Popup')
+          .addTo(mapRef.current);
+
+
+      // Update current destination
+      // Add new markers with popups
+      new L.Marker(current, { icon: customMarkerIcon })
+          .bindPopup('Your Marker Popup')
+          .addTo(mapRef.current);
+
+      new L.Marker(target, { icon: customMarkerIcon })
+          .bindPopup('Your Destination Marker Popup')
+          .addTo(mapRef.current);
+
+      setCurrentDestination(destinationMarker.toString());
     }
   }, [userPosition, destinationMarker]);
 
   return (
-      <div>
-        <MapContainer
-            ref={mapRef}
-            center={userPosition}
-            zoom={zoom}
-            style={{ height: 'calc(100vh - 56px)', width: '100%' }}
-        >
-          <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          <Marker position={userPosition} icon={customMarkerIcon}>
-            <Popup>Your Marker Popup</Popup>
-          </Marker>
-          {destinationMarker && (
-              <Marker position={destinationMarker} icon={customMarkerIcon}>
-                <Popup>Your Destination Marker Popup</Popup>
-              </Marker>
-          )}
-        </MapContainer>
-      </div>
+    <div >
+      <MapContainer ref={mapRef} center={userPosition} zoom={zoom} style={{ height: 'calc(100vh - 56px)', width: '100%' }}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        <Marker position={userPosition} icon={customMarkerIcon}>
+          <Popup>Your Marker Popup</Popup>
+        </Marker>
+        {destinationMarker && (
+            <Marker position={destinationMarker} icon={customMarkerIcon}>
+              <Popup>Your Destination Marker Popup</Popup>
+            </Marker>
+        )}
+      </MapContainer>
+    </div>
   );
 };
 
