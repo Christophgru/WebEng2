@@ -20,11 +20,11 @@ const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
 
       handleUpdatePosition(newPosition);
 
-      // Center the map on the user's current position
-      if(firstPos===0){
+      // Center the map on the user's current position. Center Map until 5th position arrives, then just update marker.
+      if(firstPos<5){
         console.log(position.coords);
         mapRef.current && mapRef.current.setView(newPosition, zoom);
-        setFirstPos(1);
+        setFirstPos(firstPos+1);
       }
     };
 
