@@ -7,11 +7,11 @@ import {
     NavTitleLarge,
     Link,
     Toolbar,
-    Block, Input, Button, List, ListItem,
+     Input, Button, List, ListItem,
 } from 'framework7-react';
 
 import MapComponent from '../components/MapComponent';
-  
+
 const initialLocation = [37.7749, -122.4194]; // Example location (San Francisco)
 const zoom = 12;
 const cityList = [
@@ -20,6 +20,43 @@ const cityList = [
     'Los Angeles',
     'Chicago'
 ];
+
+
+export const getWikipediaPageInfo = async (latitude, longitude) => {
+    const apiUrl = 'http://localhost:3001/wikipedia'; // Use your server URL
+    const params = new URLSearchParams({
+        lat: latitude,
+        lon: longitude,
+    });
+
+    try {
+        const response = await fetch(`${apiUrl}?${params.toString()}`);
+        const data = await response.json();
+
+        // Process the Wikipedia API response
+        console.log('Wikipedia Data:', data);
+
+        if (data.query && data.query.pages) {
+            const firstPageId = Object.keys(data.query.pages)[0];
+            const pageInfo = data.query.pages[firstPageId];
+
+            console.log('Title:', pageInfo.title);
+            console.log('Extract:', pageInfo.extract);
+
+            return {
+                title: pageInfo.title,
+                extract: pageInfo.extract,
+            };
+        } else {
+            console.log('No Wikipedia page found for the given coordinates.');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching Wikipedia data:', error);
+        return null;
+    }
+};
+
 const HomePage = () => {
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -37,33 +74,6 @@ const HomePage = () => {
         setSuggestedCities(matchedCities);
     };
 
-    const getWikipediaPageInfo = async(latitude, longitude) => {
-        const apiUrl = 'http://localhost:3001/wikipedia'; // Use your server URL
-        const params = new URLSearchParams({
-            lat: latitude,
-            lon: longitude,
-        });
-      
-        try {
-            const response = await fetch(`${apiUrl}?${params.toString()}`);
-            const data = await response.json();
-
-            // Process the Wikipedia API response
-            console.log('Wikipedia Data:', data);
-
-            if (data.query && data.query.pages) {
-                const firstPageId = Object.keys(data.query.pages)[0];
-                const pageInfo = data.query.pages[firstPageId];
-
-                console.log('Title:', pageInfo.title);
-                console.log('Extract:', pageInfo.extract);
-            } else {
-                console.log('No Wikipedia page found for the given coordinates.');
-            }
-        } catch (error) {
-            console.error('Error fetching Wikipedia data:', error);
-        }
-    };
 
     const handleSearchConfirm = () => {
         // Hier könntest du Aktionen durchführen, wenn der Bestätigungsbutton gedrückt wird.
@@ -73,16 +83,16 @@ const HomePage = () => {
         cityList.push(searchQuery);
 
         fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + searchQuery)
-            .then(function(response) {
+            .then(function (response) {
                 return response.json();
             })
-            .then(function(json) {
+            .then(function (json) {
                 //console.log("OBJECT: " + JSON.stringify(json));
                 //console.log('LAT: ' + json[0].lat);
-                console.log("Die Koordinaten der Adresse: " +searchQuery+ " sind:");
+                console.log("Die Koordinaten der Adresse: " + searchQuery + " sind:");
 
-                console.log("Latitude/Breitengrad: " + json[0].lat );
-                console.log("Longitude/Längengrad: " + json[0].lon );
+                console.log("Latitude/Breitengrad: " + json[0].lat);
+                console.log("Longitude/Längengrad: " + json[0].lon);
                 getWikipediaPageInfo(json[0].lat, json[0].lon)
 
                 //call MapComponent.jsx now and set destinationMarker to [Latitude and Longitude]
@@ -102,7 +112,7 @@ const HomePage = () => {
         setSuggestedCities(matchedCities);
     };
 
-    return(
+    return (
         <Page name="home">
             {/* Top Navbar */}
             <Navbar large slim>
@@ -113,7 +123,7 @@ const HomePage = () => {
                     clearButton
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    style={{ flex: '1', marginRight: '8px' }}
+                    style={{flex: '1', marginRight: '8px'}}
                 />
                 <Button fill onClick={handleSearchConfirm}>
                     Confirm
@@ -140,14 +150,14 @@ const HomePage = () => {
                     {/* List of suggested cities */}
                     <List>
                         {suggestedCities.map((city) => (
-                            <ListItem key={city} title={city} onClick={() => handleCitySelect(city)} />
+                            <ListItem key={city} title={city} onClick={() => handleCitySelect(city)}/>
                         ))}
                     </List>
                 </div>
             )}
 
             {/* Map component */}
-            <MapComponent initialLocation={initialLocation} zoom={zoom} destinationMarker={destinationMarker} />
+            <MapComponent initialLocation={initialLocation} zoom={zoom} destinationMarker={destinationMarker}/>
 
             {/* Toolbar */}
             <Toolbar bottom>
