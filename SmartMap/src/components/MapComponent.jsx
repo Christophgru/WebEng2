@@ -138,8 +138,12 @@ const MapComponent = ({zoom, destinationMarker, initialLocation}) => {
                         extract: data.extract,
                     }));
 
-                    // Add new markers with popups
-                    new L.Marker(current, { icon: customMarkerIcon }).bindPopup('Your Marker Popup').addTo(mapRef.current);
+                    // data. title &extract in State variable schreiben
+                    //informationen in linkes oder rechtes panel verteilen==> scrollable
+                    //information auf Popup über marker kann auch beibehalten werden, muss aber unbedingt auf 4 zeilen
+                    // oder so gekürzt werden, um nicht das Format zu sprengen.
+                    new L.Marker(current, { icon: customMarkerIcon })
+                        .bindPopup('Your Marker Popup').addTo(mapRef.current);
 
                     new L.Marker(target, { icon: customMarkerIcon }).bindPopup(
                         `<b>${data.title}</b><br>${data.extract}`
