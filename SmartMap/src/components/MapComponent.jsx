@@ -131,18 +131,16 @@ const MapComponent = ({zoom, destinationMarker, initialLocation}) => {
                     // Fetch Wikipedia data and wait for it to complete
                     const data = await getWikipediaPageInfo(destinationMarker[0], destinationMarker[1]);
 
-                    // Update destination info state
-                    setDestinationInfo((prevInfo) => ({
-                        ...prevInfo,
-                        title: data.title,
-                        extract: data.extract,
-                    }));
 
-                    // data. title &extract in State variable schreiben
-                    //informationen in linkes oder rechtes panel verteilen==> scrollable
-                    //information auf Popup über marker kann auch beibehalten werden, muss aber unbedingt auf 4 zeilen
-                    // oder so gekürzt werden, um nicht das Format zu sprengen.
-                    new L.Marker(current, { icon: customMarkerIcon })
+                    if (data !== null) {
+                        // Update destination info state
+                        setDestinationInfo((prevInfo) => ({
+                            ...prevInfo,
+                            title: data.title,
+                            extract: data.extract,
+                        }));
+                        new L.Marker(current, { icon: customMarkerIcon })
+
                         .bindPopup('Your Marker Popup').addTo(mapRef.current);
 
                     new L.Marker(target, { icon: customMarkerIcon }).bindPopup(
@@ -150,6 +148,17 @@ const MapComponent = ({zoom, destinationMarker, initialLocation}) => {
                     ).addTo(mapRef.current);
 
                     setCurrentDestination(destinationMarker.toString());
+
+                    } else {
+                        // Handle the case when data is null, if needed
+                        console.log("Data is null");
+                    }
+
+                    // data. title &extract in State variable schreiben
+                    //informationen in linkes oder rechtes panel verteilen==> scrollable
+                    //information auf Popup über marker kann auch beibehalten werden, muss aber unbedingt auf 4 zeilen
+                    // oder so gekürzt werden, um nicht das Format zu sprengen.
+
                 } catch (error) {
                     console.error('Error fetching Wikipedia data:', error);
                 }
