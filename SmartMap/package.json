@@ -6,10 +6,12 @@
   "repository": "",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "npm run dev",
+    "start": "concurrently \"npm run start-main\" \"npm run start-proxy\"",
+    "start-main": "npm run dev",
     "dev": "cross-env NODE_ENV=development vite",
     "build": "cross-env NODE_ENV=production vite build",
-    "postinstall": "cpy --flat ./node_modules/framework7-icons/fonts/*.* ./src/fonts/ && cpy --flat ./node_modules/material-icons/iconfont/*.* ./src/fonts/"
+    "postinstall": "cpy --flat ./node_modules/framework7-icons/fonts/*.* ./src/fonts/ && cpy --flat ./node_modules/material-icons/iconfont/*.* ./src/fonts/",
+    "start-proxy": "node ./src/js/server.js"
   },
   "browserslist": [
     "IOS >= 15",
@@ -25,6 +27,7 @@
     "framework7-icons": "^5.0.5",
     "framework7-react": "^8.3.0",
     "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
     "material-icons": "^1.13.12",
     "node-fetch": "^3.3.2",
     "prop-types": "^15.8.1",
@@ -36,9 +39,11 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
     "cpy-cli": "^5.0.0",
     "cross-env": "^7.0.3",
     "postcss-preset-env": "^9.3.0",
-    "vite": "^5.0.11"
+    "vite": "^5.0.11",
+    "vite-plugin-mkcert": "^1.17.3"
   }
 }

@@ -131,6 +131,7 @@ const MapComponent = ({zoom, destinationMarker, initialLocation}) => {
                     // Fetch Wikipedia data and wait for it to complete
                     const data = await getWikipediaPageInfo(destinationMarker[0], destinationMarker[1]);
 
+
                     if (data !== null) {
                         // Update destination info state
                         setDestinationInfo((prevInfo) => ({
@@ -139,6 +140,7 @@ const MapComponent = ({zoom, destinationMarker, initialLocation}) => {
                             extract: data.extract,
                         }));
                         new L.Marker(current, { icon: customMarkerIcon })
+
                         .bindPopup('Your Marker Popup').addTo(mapRef.current);
 
                     new L.Marker(target, { icon: customMarkerIcon }).bindPopup(
@@ -146,6 +148,7 @@ const MapComponent = ({zoom, destinationMarker, initialLocation}) => {
                     ).addTo(mapRef.current);
 
                     setCurrentDestination(destinationMarker.toString());
+
                     } else {
                         // Handle the case when data is null, if needed
                         console.log("Data is null");
