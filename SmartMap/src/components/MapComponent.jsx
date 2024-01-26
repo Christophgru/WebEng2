@@ -176,7 +176,7 @@ const MapComponent = ({zoom, destinationMarker, initialLocation}) => {
     return (
         <div>
             <MapContainer ref={mapRef} center={userPosition} zoom={zoom}
-                          style={{height: 'calc(100vh - 56px)', width: '100%'}}
+                          style={{height: 'calc(100vh - 56px)', width: '100%', position:'fixed'}}
             >
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -21,6 +21,11 @@ const cityList = [
     'Chicago'
 ];
 
+const limitSentences = (text, sentenceLimit = 3) => {
+    const sentences = text.split(/[.!?]/);
+    const truncatedText = sentences.slice(0, sentenceLimit).join('. ') + '.';
+    return truncatedText;
+  };
 
 export const getWikipediaPageInfo = async (latitude, longitude) => {
     const apiUrl = 'http://localhost:3001/wikipedia'; // Use your server URL
@@ -39,10 +44,10 @@ export const getWikipediaPageInfo = async (latitude, longitude) => {
         if (data.query && data.query.pages) {
             const firstPageId = Object.keys(data.query.pages)[0];
             const pageInfo = data.query.pages[firstPageId];
-
+            pageInfo.extract = limitSentences(pageInfo.extract, 3);
             console.log('Title:', pageInfo.title);
             console.log('Extract:', pageInfo.extract);
-
+            
             return {
                 title: pageInfo.title,
                 extract: pageInfo.extract,
@@ -115,20 +120,19 @@ const HomePage = () => {
     return (
         <Page name="home">
             {/* Top Navbar */}
-            <Navbar large slim>
-                <NavTitle>WebMap</NavTitle>
+            <Navbar>
+            <h1 style={{marginLeft: '1%', color: '#48494B'}}>WebMap</h1>
                 <Input
                     type="text"
                     placeholder="Search..."
                     clearButton
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    style={{flex: '1', marginRight: '8px'}}
+                    style={{flex: '1', marginRight: '3%', marginLeft: '3%'}}
                 />
-                <Button fill onClick={handleSearchConfirm}>
+                <Button fill onClick={handleSearchConfirm} style={{marginRight: '1%'}}>
                     Confirm
                 </Button>
-                <NavTitleLarge>WebMap</NavTitleLarge>
             </Navbar>
 
             {/* Floating container for suggested cities */}
