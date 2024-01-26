@@ -3,11 +3,11 @@ Prüfungsleistung für das Modul Webeng2 an der DHBW Ravensburg Campus FN
 
 
 ## HowTo
-``$cd`` in fw7empty bzw. fw7example ordner:
+``$cd`` in SmartMap ordner:
 
 ``$ npm install`` zum laden der offenen dependencies.
 
-``$npm start``  starten für fw7 demo.
+``$npm start``  starten für SmartMap
 
 Für die Kartendemo mit Service Helper einfach index.html im hauptordner aufrufen.
 
@@ -23,6 +23,8 @@ fw7empty: Ein leeres framework7 Projekt mit react
 fw7example: Ein beispiel framework7 Projekt mit react.
 
 DHBW: Cloned repo with example projects of Friedhelm Koch
+
+SmartMap:   WebApp der Prüfungsleistung
 
 mapWithServiceHelper: functioning PWA with SH, install&offline capable 
 

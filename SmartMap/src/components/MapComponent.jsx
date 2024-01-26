@@ -97,6 +97,7 @@ const MapComponent = ({zoom, destinationMarker, initialLocation}) => {
                         mapRef.current.removeLayer(layer);
                     }
                 });
+                
 
                 // Add new routing control
                 const routingControl = L.Routing.control({
@@ -115,6 +116,7 @@ const MapComponent = ({zoom, destinationMarker, initialLocation}) => {
                             },
                         ],
                     },
+                    createMarker: function() { return null; },
                 })
                     .on('routesfound', function (e) {
                         const routes = e.routes;
