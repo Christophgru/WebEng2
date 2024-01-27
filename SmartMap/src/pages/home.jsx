@@ -162,6 +162,7 @@ const HomePage = () => {
             {/* Toolbar */}
             <Toolbar bottom>
                 <Link>Left Link</Link>
+                <Link href="/impressum/">Impressum</Link>
                 <Link>Right Link</Link>
             </Toolbar>
         </Page>
