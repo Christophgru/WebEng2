@@ -35,6 +35,13 @@ export const getWikipediaPageInfo = async (latitude, longitude) => {
         console.log('Wikipedia Data:', data);
 
         if (data.query && data.query.pages) {
+
+            const firstPageId = Object.keys(data.query.pages)[0];
+            const pageInfo = data.query.pages[firstPageId];
+
+            console.log('Title:', pageInfo.title);
+            console.log('Extract:', pageInfo.extract);
+
             return {
                 title: pageInfo.title,
                 extract: pageInfo.extract,
