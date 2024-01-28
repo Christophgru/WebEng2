@@ -35,7 +35,6 @@ export const getWikipediaPageInfo = async (latitude, longitude) => {
         console.log('Wikipedia Data:', data);
 
         if (data.query && data.query.pages) {
-            const firstPageId = Object.keys(data.query.pages)[0];
             return {
                 title: pageInfo.title,
                 extract: pageInfo.extract,
@@ -153,9 +152,9 @@ const HomePage = () => {
 
             {/* Toolbar */}
             <Toolbar bottom>
-                <Link>Left Link</Link>
+                <Link></Link>
                 <Link href="/impressum/">Impressum</Link>
-                <Link>Right Link</Link>
+                <Link></Link>
             </Toolbar>
         </Page>
     );
