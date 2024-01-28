@@ -15,11 +15,16 @@ const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
     const mapRef = useRef(null);
     const [firstPos, setFirstPos] = useState(0);
     const [destinationInfo, setDestinationInfo] = useState({ title: '', extract: '' });
-
+    const [wikiDataFetched, setWikiDataFetched] = useState(false);
     const [isWikiInfoOpen, setWikiInfo] = useState(false);
 
     const openWikiPage = () => {
-        setWikiInfo(true);
+        // Check if Wikipedia data has been fetched
+        if (wikiDataFetched) {
+            setWikiInfo(true);
+        } else {
+            console.log('Wikipedia data not yet fetched');
+        }
     };
 
     const closeWikiInfo = () => {
@@ -152,9 +157,17 @@ const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
 
                         setCurrentDestination(destinationMarker.toString());
 
+                        setWikiDataFetched(true);
+
                     } else {
                         // Handle the case when data is null, if needed
                         console.log("Data is null");
+                        setDestinationInfo((prevInfo) => ({
+                            ...prevInfo,
+                            title: "No Data could be found",
+                            extract: "Wikipedia doesn't know anything about this place or cant be reached",
+                        }));
+                        setWikiDataFetched(true);
                     }
 
                     new L.Marker(current, { icon: customMarkerIcon })
