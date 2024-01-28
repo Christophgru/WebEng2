@@ -172,7 +172,7 @@ const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
 
                     new L.Marker(current, { icon: customMarkerIcon })
 
-                        .bindPopup('Your Marker Popup').addTo(mapRef.current);
+                        .bindPopup('Your Position').addTo(mapRef.current);
 
                     new L.Marker(target, { icon: customMarkerIcon }).on('click', openWikiPage)
                         .addTo(mapRef.current);
