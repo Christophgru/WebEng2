@@ -3,8 +3,6 @@ import React, {useState} from 'react';
 import {
     Page,
     Navbar,
-    NavTitle,
-    NavTitleLarge,
     Link,
     Toolbar,
      Input, Button, List, ListItem,
@@ -21,11 +19,6 @@ const cityList = [
     'Chicago'
 ];
 
-const limitSentences = (text, sentenceLimit = 3) => {
-    const sentences = text.split(/[.!?]/);
-    const truncatedText = sentences.slice(0, sentenceLimit).join('. ') + '.';
-    return truncatedText;
-  };
 
 export const getWikipediaPageInfo = async (latitude, longitude) => {
     const apiUrl = 'http://localhost:3001/wikipedia'; // Use your server URL
@@ -43,11 +36,6 @@ export const getWikipediaPageInfo = async (latitude, longitude) => {
 
         if (data.query && data.query.pages) {
             const firstPageId = Object.keys(data.query.pages)[0];
-            const pageInfo = data.query.pages[firstPageId];
-            pageInfo.extract = limitSentences(pageInfo.extract, 3);
-            console.log('Title:', pageInfo.title);
-            console.log('Extract:', pageInfo.extract);
-            
             return {
                 title: pageInfo.title,
                 extract: pageInfo.extract,
