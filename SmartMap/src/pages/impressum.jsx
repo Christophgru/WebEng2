@@ -21,7 +21,7 @@ const ImpressumPage = () => {
             Address: Fallenbrunnen 2, Friedrichshafen, Deutschland
           </p>
           <p>
-            Email: lennart.schuster@gmail.com
+            Email: project@neva.blue
           </p>
           <p>
             Phone: -
