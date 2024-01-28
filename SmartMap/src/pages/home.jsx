@@ -3,8 +3,6 @@ import React, {useState} from 'react';
 import {
     Page,
     Navbar,
-    NavTitle,
-    NavTitleLarge,
     Link,
     Toolbar,
      Input, Button, List, ListItem,
@@ -37,6 +35,7 @@ export const getWikipediaPageInfo = async (latitude, longitude) => {
         console.log('Wikipedia Data:', data);
 
         if (data.query && data.query.pages) {
+
             const firstPageId = Object.keys(data.query.pages)[0];
             const pageInfo = data.query.pages[firstPageId];
 
@@ -62,6 +61,8 @@ const HomePage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [suggestedCities, setSuggestedCities] = useState([]);
     const [destinationMarker, setDestinationMarker] = useState([0, 0]);
+    const [lastChosenCity, setLastChosenCity] = useState('');
+    const [cityChosen, setCityChosen] = useState(false);
     const handleSearchChange = (event) => {
         if (event.key === 'Enter')  {
             handleSearchConfirm();
@@ -80,6 +81,12 @@ const HomePage = () => {
         console.log('Suche bestätigt:', searchQuery);
         setSuggestedCities([]);
         cityList.push(searchQuery);
+        // Set the city chosen state
+        setCityChosen(true);
+        // Set the last chosen city
+        setLastChosenCity(searchQuery);
+        // Clear the search query
+        setSearchQuery('');
 
         fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + searchQuery)
             .then(function (response) {
@@ -95,7 +102,6 @@ const HomePage = () => {
 
                 //call MapComponent.jsx now and set destinationMarker to [Latitude and Longitude]
                 setDestinationMarker([parseFloat(json[0].lat), parseFloat(json[0].lon)]);
-                //todo: fly to position of destination and draw route
             })
     };
 
@@ -113,20 +119,19 @@ const HomePage = () => {
     return (
         <Page name="home">
             {/* Top Navbar */}
-            <Navbar large slim>
-                <NavTitle>WebMap</NavTitle>
+            <Navbar>
+            <h1 style={{marginLeft: '1%', color: '#48494B'}}>WebMap</h1>
                 <Input
                     type="text"
-                    placeholder="Search..."
+                    placeholder={cityChosen ? `Route to ${lastChosenCity}...` : 'Search...'}
                     clearButton
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    style={{flex: '1', marginRight: '8px'}}
+                    style={{flex: '1', marginRight: '3%', marginLeft: '3%'}}
                 />
-                <Button fill onClick={handleSearchConfirm}>
+                <Button fill onClick={handleSearchConfirm} style={{marginRight: '1%'}}>
                     Confirm
                 </Button>
-                <NavTitleLarge>WebMap</NavTitleLarge>
             </Navbar>
 
             {/* Floating container for suggested cities */}
@@ -159,9 +164,9 @@ const HomePage = () => {
 
             {/* Toolbar */}
             <Toolbar bottom>
-                <Link>Left Link</Link>
+                <Link></Link>
                 <Link href="/impressum/">Impressum</Link>
-                <Link>Right Link</Link>
+                <Link></Link>
             </Toolbar>
         </Page>
     );
