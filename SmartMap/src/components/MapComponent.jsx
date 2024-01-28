@@ -147,12 +147,7 @@ const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
                             title: data.title,
                             extract: data.extract,
                         }));
-                        new L.Marker(current, { icon: customMarkerIcon })
 
-                            .bindPopup('Your Marker Popup').addTo(mapRef.current);
-
-                        new L.Marker(target, { icon: customMarkerIcon }).on('click', openWikiPage)
-                            .addTo(mapRef.current);
 
 
                         setCurrentDestination(destinationMarker.toString());
@@ -161,6 +156,14 @@ const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
                         // Handle the case when data is null, if needed
                         console.log("Data is null");
                     }
+
+                    new L.Marker(current, { icon: customMarkerIcon })
+
+                        .bindPopup('Your Marker Popup').addTo(mapRef.current);
+
+                    new L.Marker(target, { icon: customMarkerIcon }).on('click', openWikiPage)
+                        .addTo(mapRef.current);
+
 
                     // data. title &extract in State variable schreiben
                     //informationen in linkes oder rechtes panel verteilen==> scrollable
