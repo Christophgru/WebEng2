@@ -61,6 +61,8 @@ const HomePage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [suggestedCities, setSuggestedCities] = useState([]);
     const [destinationMarker, setDestinationMarker] = useState([0, 0]);
+    const [lastChosenCity, setLastChosenCity] = useState('');
+    const [cityChosen, setCityChosen] = useState(false);
     const handleSearchChange = (event) => {
         const query = event.target.value;
         setSearchQuery(query);
@@ -80,6 +82,12 @@ const HomePage = () => {
         //Vorschläge zurücksetzen, um platz für Karte zu machen
         setSuggestedCities([]);
         cityList.push(searchQuery);
+        // Set the city chosen state
+        setCityChosen(true);
+        // Set the last chosen city
+        setLastChosenCity(searchQuery);
+        // Clear the search query
+        setSearchQuery('');
 
         fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + searchQuery)
             .then(function (response) {
@@ -96,7 +104,6 @@ const HomePage = () => {
 
                 //call MapComponent.jsx now and set destinationMarker to [Latitude and Longitude]
                 setDestinationMarker([parseFloat(json[0].lat), parseFloat(json[0].lon)]);
-                //todo: fly to position of destination and draw route
             })
     };
 
@@ -118,7 +125,7 @@ const HomePage = () => {
             <h1 style={{marginLeft: '1%', color: '#48494B'}}>WebMap</h1>
                 <Input
                     type="text"
-                    placeholder="Search..."
+                    placeholder={cityChosen ? `Route to ${lastChosenCity}...` : 'Search...'}
                     clearButton
                     value={searchQuery}
                     onChange={handleSearchChange}
