@@ -8,11 +8,13 @@ import { f7, Panel, Navbar, Block } from 'framework7-react';
 import axios from 'axios';
 import { getWikipediaPageInfo } from '@/pages/home';
 
+
 const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
     const popupRef = useRef(null);
     const [userPosition, setUserPosition] = useState([0, 0]);
     const [currentDestination, setCurrentDestination] = useState(null);
     const mapRef = useRef(null);
+    const routingRef = useRef(null);
     const [firstPos, setFirstPos] = useState(0);
     const [destinationInfo, setDestinationInfo] = useState({ title: '', extract: '' });
     const [wikiDataFetched, setWikiDataFetched] = useState(false);
@@ -110,7 +112,7 @@ const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
                         mapRef.current.removeLayer(layer);
                     }
                 });
-
+              
                 // Add new routing control
                 const routingControl = L.Routing.control({
                     waypoints: [current, target],
@@ -137,8 +139,12 @@ const MapComponent = ({ zoom, destinationMarker, initialLocation }) => {
                         const minutes = Math.round((summary.totalTime % 3600) / 60);
 
                         console.log(`Total distance: ${distance} km and total time ca: ${minutes} minutes`);
-                    }).addTo(mapRef.current);
+                    });
 
+                if (routingRef.current != null) {
+                    mapRef.current.removeControl(routingRef.current);
+                }
+                routingRef.current = routingControl;
                 routingControl.addTo(mapRef.current);
 
                 try { // Fetch Wikipedia data and wait for it to complete

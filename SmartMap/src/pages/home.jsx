@@ -64,10 +64,11 @@ const HomePage = () => {
     const [lastChosenCity, setLastChosenCity] = useState('');
     const [cityChosen, setCityChosen] = useState(false);
     const handleSearchChange = (event) => {
+        if (event.key === 'Enter')  {
+            handleSearchConfirm();
+        }
         const query = event.target.value;
         setSearchQuery(query);
-        // Hier könntest du weitere Aktionen ausführen, z.B. Suchvorgänge starten.
-        //hier könnten Vorschläge von einer StädtenamenAPI angezeigt werden
         const matchedCities = cityList.filter((city) =>
             city.toLowerCase().includes(query.toLowerCase())
         );
@@ -77,9 +78,7 @@ const HomePage = () => {
 
 
     const handleSearchConfirm = () => {
-        // Hier könntest du Aktionen durchführen, wenn der Bestätigungsbutton gedrückt wird.
         console.log('Suche bestätigt:', searchQuery);
-        //Vorschläge zurücksetzen, um platz für Karte zu machen
         setSuggestedCities([]);
         cityList.push(searchQuery);
         // Set the city chosen state
@@ -97,7 +96,6 @@ const HomePage = () => {
                 //console.log("OBJECT: " + JSON.stringify(json));
                 //console.log('LAT: ' + json[0].lat);
                 console.log("Die Koordinaten der Adresse: " + searchQuery + " sind:");
-
                 console.log("Latitude/Breitengrad: " + json[0].lat);
                 console.log("Longitude/Längengrad: " + json[0].lon);
                 getWikipediaPageInfo(json[0].lat, json[0].lon)
